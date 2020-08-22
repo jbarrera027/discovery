@@ -10,7 +10,7 @@ server:
 
 eureka:
   instance:
-    hostname: discovery-service-jbarrera
+    hostname: cloud-discover-service-jbarrer
   client:
     register-with-eureka: false
     fetch-registry: false
