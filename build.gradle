@@ -28,8 +28,3 @@ task unpack(type: Copy) {
     into("build/dependency")
 }
 
-docker {
-    name "${dockerGroup}:${dockerRegistryPort}/commerce/${project.name}:dev"
-    copySpec.from(tasks.unpack.outputs).into("dependency")
-    buildArgs(['DEPENDENCY': "dependency"])
-}
