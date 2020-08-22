@@ -1,30 +1,36 @@
-apply plugin: 'idea'
-apply plugin: 'java'
-apply plugin: "org.springframework.boot"
-apply plugin: 'com.palantir.docker'
+plugins {
+	id 'org.springframework.boot' version '2.3.2.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+}
 
-group 'co.edu.cedesistemas'
-version '0.0.1-SNAPSHOT'
+group = 'co.edu.cedesistemas'
+version = '0.0.1.SNAPSHOT'
 sourceCompatibility = '11'
 
-dependencies {
-    implementation "org.springframework.boot:spring-boot-starter-web"
-    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+repositories {
+	mavenCentral()
+}
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test") {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
-    testImplementation 'org.springframework.security:spring-security-test'
+ext {
+	set('springCloudVersion', "Hoxton.SR7")
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
 }
 
 test {
-    useJUnitPlatform()
+	useJUnitPlatform()
 }
-
-task unpack(type: Copy) {
-    dependsOn bootJar
-    from(zipTree(tasks.bootJar.outputs.files.singleFile))
-    into("build/dependency")
-}
-
